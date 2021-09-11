@@ -3,14 +3,10 @@ let mongoose = require("mongoose");
 
 // checking for enviroment var for the mongo server and connect to it if there is one
 // if there isnt connect to localhost
+console.log(process.env.mongoUrl)
 if (process.env.mongoUrl) {
   mongoose
-    .connect(process.env.mongoUrl, {
-      auth: {
-        user: process.env.mongoUsername,
-        password: process.env.mongoPw
-      }
-    })
+    .connect(process.env.mongoUrl)
     .then(() => console.log("connection successful"))
     .catch(err => console.error(err));
 } else {

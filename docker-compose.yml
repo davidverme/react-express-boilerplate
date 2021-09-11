@@ -1,0 +1,40 @@
+version: "3.7"
+
+services:
+  api:
+    environment:
+      - mongoUrl=mongodb://mongo/nft-print
+    build: ./server
+    volumes:
+      - ./server:/service
+    ports:
+      - "3001:3001"
+    links:
+      - mongo
+    depends_on:
+      - mongo
+
+  web:
+    environment:
+      - IMAGE_RESIZE_PROXY_URL=http://localhost:3000
+    build: ./client
+    volumes:
+      - ./client/src:/service/src
+      - ./client/public:/service/public
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+
+  mongo:
+    image: mongo:4
+    environment:
+      - MONGO_DATA_DIR=/data/db
+      - MONGO_LOG_DIR=/dev/null
+    volumes:
+      - db-data:/data/db
+    ports:
+      - 27017:27017
+
+volumes:
+  db-data:
